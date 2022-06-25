@@ -8,6 +8,7 @@ import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
+import InformationItem from '../InformationItem'
 
 const useStyles = makeStyles({
   wrapper: {
@@ -15,34 +16,32 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '2vw',
+    padding: '2vh 2vw'
   },
 })
 
-export default function List({ toggleViewer }) {
+export default function List({ hasLoaded, hasError, toggleViewer, fallback, countries, selectCountry }) {
   const classes = useStyles()
-  const [countries, setCountries] = React.useState([])
-  React.useEffect(() => {
-  const fetchCountries = async () => {
-    const data = await fetch('https://restcountries.com/v3.1/all').then(res => res.json())
-    setCountries(data)
-  }
-  fetchCountries()
-}, [countries])
-
+  if (!countries || !hasLoaded || hasError) return fallback
   return (
     <Box sx={{ flexGrow: 1 }} className={classes.wrapper}>
-    <Grid container spacing={8}>
+      <Grid container spacing={8}>
       {/* using cca2 as the unique ID - see more here https://github.com/mledoze/countries/blob/master/README.md */}
-      {countries.slice(0,50).map( (c) => 
-        <BasicCard key={c.cca2} country={c} toggleViewer={toggleViewer} />
-      )} 
-    </Grid>
+      { countries.map( (c) => 
+        <BasicCard 
+          key={c.cca2} 
+          country={c} 
+          toggleViewer={toggleViewer}
+          selectCountry={selectCountry}
+          />
+        )
+      } 
+      </Grid>
     </Box>
   );
 }
 
-const BasicCard = ({ country, toggleViewer }) => {
+const BasicCard = ({ country, toggleViewer, selectCountry }) => {
   const imagePath = country.flags.svg
   const officialName = country.name.official
   const commonName = country.name.common
@@ -51,34 +50,42 @@ const BasicCard = ({ country, toggleViewer }) => {
   const region = country.region
   const capital = country.capital
 
+  const handleClick = () => {
+    toggleViewer()
+    selectCountry(country)
+  }
+
   return (
     <Grid item xs={3}>
-      <Card sx={{ minWidth: 50 }}>
+      <Card sx={{ minWidth: 70 }}>
         <CardMedia
           component="img"
-          height="140"
+          height="220px"
           image={imagePath}
           alt={`${id} country flag`}
+          sx={{
+            objectFit: 'stretch', 
+          }}
         />
         <CardContent>
-          <Typography sx={{ overflow: 'hide'}}  variant="h6" component="div">
+          <Typography variant="h6" component="div">
             {officialName}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {commonName}
           </Typography>
           <Typography variant="body2">
-            {`Population: ${population}`}
+            <InformationItem fieldName={'Population'} field={population} />
           </Typography>
           <Typography variant="body2">
-            {`Region: ${region}`}
+            <InformationItem fieldName={'Region'} field={region} />
           </Typography>
           <Typography variant="body2">
-            {`Capital: ${capital}`}
+            <InformationItem fieldName={'Capital'} field={capital} />
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={toggleViewer}>
+          <Button size="small" onClick={handleClick}>
             Learn More
           </Button>
         </CardActions>

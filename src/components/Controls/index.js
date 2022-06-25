@@ -5,13 +5,15 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { Divider } from '@mui/material'
 
 const useStyles = makeStyles({
   controls: {
+    backgroundColor: '#fff',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '2vw',
+    padding: '2vh 2vw',
   },
 })
 
@@ -22,16 +24,20 @@ const handleOnChange = () => {
 export default function Controls() {
   const classes = useStyles()
   return (
-    <div className={classes.controls}>
-      <TextField
-        onChange={handleOnChange}
-        className={classes.search} 
-        id="outlined-search" 
-        label="🔍 Search for a country" 
-        type="search" 
-        />
-      <BasicMenu />
-    </div>
+    <>
+      <div className={classes.controls}>
+        <TextField
+          onChange={handleOnChange}
+          className={classes.search} 
+          id="outlined-search" 
+          label="🔍 Search for a country" 
+          type="search" 
+          />
+        <BasicMenu />
+      </div>
+      <Divider light />
+    </>
+
   )
 }
 
@@ -49,7 +55,8 @@ const BasicMenu = () => {
     setRegion(r)
     handleClose()
   }
-  const regions = ['Australia', 'Europe', 'Americas', 'Asia']
+  
+  const regions = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
   return (
     <div>
       <Button
@@ -73,7 +80,10 @@ const BasicMenu = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        {regions.map( r => <MenuItem onClick={() => handleSelectRegion(r)}>{r}</MenuItem>)}
+        {regions.map( (r, index) =>   <MenuItem 
+          key={index}
+          onClick={() => handleSelectRegion(r)}>{r}
+        </MenuItem>)}
       </Menu>
     </div>
   )

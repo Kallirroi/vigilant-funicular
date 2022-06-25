@@ -10,10 +10,6 @@ import { createTheme } from '@mui/material/styles'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
-  toolbar: {
-    backgroundColor: '#fff',
-    color: '#000',
-  },
   switch: {
     width: 62,
     height: 34,
