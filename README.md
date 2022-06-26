@@ -9,8 +9,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Requirements - extra
 - [ ] E2E tests
-- [ ] Performance optimization
-- [ ] Deployment
+- [x] Performance optimization
+- [x] Deployment
 - [x] Color mode toggle
 - [x] Filter countries by region
 - [ ] Click through to the border countries on the detail page
