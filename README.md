@@ -21,6 +21,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - More attention to accessibility
 - Potentially use Apollo to turn this REST endpoint to a GraphQL service
 
+
+## Screenshots
+
+![image1.png](image1.png)
+![image2.png](image2.png)
+
 ## Run locally
 
 In the project directory:
