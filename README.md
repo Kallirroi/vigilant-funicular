@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and integrates with the REST Countries V2 API to pull country data and display it. You can access the design instructions in this [Figma file](https://www.figma.com/file/yibnsJAbCTBjeBYpWjkuB0/Untitled?node-id=1%3A24).
 
+👉 Live [demo](https://vigilant-funicular.vercel.app/)
+
 ## Requirements - basic
 - [x] See all countries from the API on the homepage on load
 - [x] Search for a country using an input field
@@ -19,7 +21,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Dynamic route generation 
 - Render language names instead of language codes
 - More attention to accessibility
-- Potentially use Apollo to turn this REST endpoint to a GraphQL service
+- Potentially use Apollo to turn this REST endpoint to a GraphQL service - which would allow for greater efficienty as well as more complex cross-cutting queries.
 
 
 ## Screenshots

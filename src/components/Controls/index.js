@@ -26,6 +26,7 @@ export default function Controls({ onControlSelection }) {
   const classes = useStyles()
   const [searchTerm, setSearchTerm] = React.useState('')
   const [hasSubmitted, setHasSubmitted] = React.useState(false)
+  const [region, setRegion] = React.useState('')
   return (
     <>
       <Grid container className={classes.controls}>
@@ -36,14 +37,24 @@ export default function Controls({ onControlSelection }) {
           onControlSelection={onControlSelection} 
           classes={classes}
           />
-        <BasicMenu onControlSelection={onControlSelection} classes={classes} />
+        <BasicMenu 
+          onControlSelection={onControlSelection} 
+          classes={classes} 
+          region={region}
+          setRegion={setRegion}
+          />
       </Grid>
       <Divider light />
-      {searchTerm !== '' &&  hasSubmitted &&
-        <Button color="secondary" onClick={() => {
-          setSearchTerm('')
-          onControlSelection(`https://restcountries.com/v3.1/all`)
-        }} className={classes.button}>← Reset search</Button>
+      {/* Show RESET if we have submitted a search or if we have selected a region */}
+      {((searchTerm !== '' && hasSubmitted) || region !== '') &&
+        <Grid container sx={{ display: 'flex', justifyContent:'center' }}>
+          <Button color="secondary" onClick={() => {
+            setSearchTerm('')
+            setRegion('')
+            onControlSelection(`https://restcountries.com/v3.1/all`)
+          }} 
+          className={classes.button}>Reset search</Button>
+        </Grid>
       }
     </>
 
@@ -51,7 +62,6 @@ export default function Controls({ onControlSelection }) {
 }
 
 const SearchField = ({ onControlSelection, searchTerm, setSearchTerm, setHasSubmitted, classes }) => {
-
   const handleSearchQuery = (e) => {
     const searchTerm = e.target.value
     setSearchTerm(searchTerm)
@@ -85,9 +95,8 @@ const SearchField = ({ onControlSelection, searchTerm, setSearchTerm, setHasSubm
   )
 }
 
-const BasicMenu = ({ onControlSelection, classes }) => {
+const BasicMenu = ({ onControlSelection, classes, region, setRegion }) => {
   const regions = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
-  const [region, setRegion] = React.useState('')
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
