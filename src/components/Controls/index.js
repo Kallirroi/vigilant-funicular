@@ -1,13 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import TextField from '@mui/material/TextField'
-import Grid from '@mui/material/Grid'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { Divider } from '@mui/material'
+import { Divider, TextField, Grid, Menu, MenuItem, Button } from '@mui/material'
 
 const useStyles = makeStyles({
   controls: {
@@ -46,21 +40,24 @@ const SearchField = ({ onControlSelection }) => {
     const searchTerm = e.target.value
     setSearchTerm(searchTerm)
   }
+
+  const handleSubmit = () => {
+    // onControlSelection(`https://restcountries.com/v3.1/name/${searchTerm.toString()}`)
+    console.log(searchTerm)
+  }
   return (
     <Grid item xs={12} md={10} lg={10}
       className={classes.search}
-      component="form"
-      noValidate
-      autoComplete="off"
-      onSubmit={() => onControlSelection(`https://restcountries.com/v3.1/name/${searchTerm}?fullText=true`)}
       >
-      <TextField
-        onChange={handleSearchQuery}
-        className={classes.search} 
-        id="outlined-search" 
-        label="🔍 Search for a country" 
-        type="search" 
-        /> 
+      <form onSubmit={handleSubmit}>
+        <TextField
+          onChange={handleSearchQuery}
+          className={classes.search} 
+          id="outlined-search" 
+          label="🔍 Search for a country" 
+          type="search" 
+          /> 
+      </form>
     </Grid>
   )
 }

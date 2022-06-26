@@ -16,10 +16,11 @@ const App = () => {
         setMode((prevMode) =>
           prevMode === 'light' ? 'dark' : 'light',
         )
+        console.log(mode)
         setStoredItem('mode', mode)
       },
     }),
-    [],
+    [mode, setStoredItem],
   )
   const getDesignTokens = (mode) => ({
     typography: {

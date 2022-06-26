@@ -9,7 +9,7 @@ import List from '../List'
 import { useLocalStorage } from '../../hooks'
 
 export function Home({ toggleColorMode }) {
-  const { getStoredItem, setStoredItem } = useLocalStorage()
+  const { setStoredItem } = useLocalStorage()
   const [isViewerMode, setViewerMode] = React.useState(false)
   const [hasLoaded, setHasLoaded] = React.useState(false)
   const [hasError, setHasError] = React.useState(false)
@@ -19,23 +19,26 @@ export function Home({ toggleColorMode }) {
   
   React.useEffect(() => {
     const fetchCountries = async () => {
-      const data = await fetch(endpoint).then(res => {
+      try {
+        const data = await fetch(endpoint).then(res => res.json()
+        ).catch(err => {
+          setHasError(true)
+          console.error(err)
+          return
+        })
         setHasLoaded(true)
-        return res.json()
-      }).catch(err => {
-        setHasError(true)
-        console.error(err)  
-      })
-      setCountries(data)
-      setStoredItem('countries', JSON.stringify(data))
+        setCountries(data)
+        setStoredItem('countries', JSON.stringify(data))
+      } catch (error) {
+        throw error
+      }
     }
     fetchCountries()
   }, [endpoint, setStoredItem])
 
   const updateList = (endpoint) => {
-    const cachedCountries = getStoredItem('countries')
-    setCountries(JSON.parse(cachedCountries))
     setEndpoint(endpoint)
+    setStoredItem('endpoint', endpoint)
     console.log(`Updating list - current endpoint: ${endpoint}`)
   }
 
