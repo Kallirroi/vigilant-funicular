@@ -26,10 +26,13 @@ export function Home({ toggleColorMode }) {
           console.error(err)
           return
         })
+
         setHasLoaded(true)
         setCountries(data)
         setStoredItem('countries', JSON.stringify(data))
       } catch (error) {
+        setHasError(true)
+        console.error(error)
         throw error
       }
     }

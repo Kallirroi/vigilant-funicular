@@ -39,8 +39,8 @@ export default function Header({ toggleColorMode }) {
               : <Brightness4Icon />
             }
           </IconButton>
-          <Typography variant="body2">
-            {mode} mode
+          <Typography variant='overline'>
+            {mode}
           </Typography>
         </Toolbar>
       </AppBar>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { Divider, TextField, Grid, Menu, MenuItem, Button } from '@mui/material'
+import { Divider, TextField, Grid, Menu, MenuItem, Button, Box } from '@mui/material'
 
 const useStyles = makeStyles({
   controls: {
@@ -16,54 +16,76 @@ const useStyles = makeStyles({
       height: '50px',
     }
   },
+  button: {
+    width: '150px',
+    margin: '1vh 0 !important',
+  },
 })
 
 export default function Controls({ onControlSelection }) {
   const classes = useStyles()
+  const [searchTerm, setSearchTerm] = React.useState('')
+  const [hasSubmitted, setHasSubmitted] = React.useState(false)
   return (
     <>
       <Grid container className={classes.controls}>
-        <SearchField onControlSelection={onControlSelection} />
-        <BasicMenu onControlSelection={onControlSelection} />
+        <SearchField 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm} 
+          setHasSubmitted={setHasSubmitted}
+          onControlSelection={onControlSelection} 
+          classes={classes}
+          />
+        <BasicMenu onControlSelection={onControlSelection} classes={classes} />
       </Grid>
       <Divider light />
+      {searchTerm !== '' &&  hasSubmitted &&
+        <Button color="secondary" onClick={() => {
+          setSearchTerm('')
+          onControlSelection(`https://restcountries.com/v3.1/all`)
+        }} className={classes.button}>← Reset search</Button>
+      }
     </>
 
   )
 }
 
-const SearchField = ({ onControlSelection }) => {
-  const classes = useStyles()
-  const [searchTerm, setSearchTerm] = React.useState('')
+const SearchField = ({ onControlSelection, searchTerm, setSearchTerm, setHasSubmitted, classes }) => {
 
   const handleSearchQuery = (e) => {
     const searchTerm = e.target.value
     setSearchTerm(searchTerm)
+    setHasSubmitted(false)
   }
 
-  const handleSubmit = () => {
-    // onControlSelection(`https://restcountries.com/v3.1/name/${searchTerm.toString()}`)
-    console.log(searchTerm)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (searchTerm !== '') {
+      setHasSubmitted(true)
+      onControlSelection(`https://restcountries.com/v3.1/name/${searchTerm.toString()}`)
+    }
   }
   return (
-    <Grid item xs={12} md={10} lg={10}
-      className={classes.search}
-      >
-      <form onSubmit={handleSubmit}>
+    <Grid item xs={12} md={10} lg={10} className={classes.search}>
+      <Box 
+        noValidate
+        autoComplete="off"
+        component="form" 
+        onSubmit={handleSubmit}>
         <TextField
+          value={searchTerm}
           onChange={handleSearchQuery}
           className={classes.search} 
           id="outlined-search" 
           label="🔍 Search for a country" 
           type="search" 
           /> 
-      </form>
+      </Box>
     </Grid>
   )
 }
 
-const BasicMenu = ({ onControlSelection }) => {
-  const classes = useStyles()
+const BasicMenu = ({ onControlSelection, classes }) => {
   const regions = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
   const [region, setRegion] = React.useState('')
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -83,7 +105,6 @@ const BasicMenu = ({ onControlSelection }) => {
   return (
     <Grid item className={classes.menu}>
       <Button
-        id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}

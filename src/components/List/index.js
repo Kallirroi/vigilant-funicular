@@ -27,7 +27,7 @@ export default function List({ toggleViewer, selectCountry }) {
   const cachedCountries = getStoredItem('countries')
   const countries = JSON.parse(cachedCountries)
 
-  if (!countries) return <Fallback children={'😬😬 Something went wrong!'}/>
+  if (!(countries instanceof Array)) return <Fallback children={'😬😬 Something went wrong!'}/>
 
   return (
     <Box className={classes.wrapper}>
@@ -52,7 +52,7 @@ const BasicCard = ({ country, toggleViewer, selectCountry }) => {
   const officialName = country.name.official
   const commonName = country.name.common
   const id = country.cca3
-  const population = country.population
+  const population = country.population.toLocaleString()
   const region = country.region
   const capital = country.capital
 

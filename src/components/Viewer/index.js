@@ -10,13 +10,6 @@ import { Paper } from '@mui/material'
 import { useLocalStorage } from '../../hooks'
 
 const useStyles = makeStyles({
-  viewer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'start',
-    padding: '2vw',
-    height: '100%',
-  },
   button: {
     width: '150px',
     margin: '1vh 0 !important',
@@ -55,7 +48,7 @@ export default function Viewer({ country, toggleViewer }) {
   const nativeName = country.name.nativeName[nativeNameKeys[0]].official
   const officialName = country.name.official
   const id = country.cca3
-  const population = country.population.toLocaleString('en-US')
+  const population = country.population.toLocaleString()
   const region = country.region
   const capital = country.capital[0]
   const topLevelDomain = country.tld
@@ -74,8 +67,12 @@ export default function Viewer({ country, toggleViewer }) {
     <Box sx={{
         bgcolor: 'background.default',
         color: 'text.primary',
-      }} 
-      className={classes.viewer}>
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'start',
+        margin: '2vh 2vw',
+        height: '100%',
+      }}>
       <Button color="secondary" onClick={toggleViewer} className={classes.button}>← Back</Button>
         <Grid container spacing={2}>
           {/* IMAGE */}
