@@ -9,6 +9,8 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import InformationItem from '../InformationItem'
+import Fallback from '../Fallback';
+import { useLocalStorage } from '../../hooks'
 
 const useStyles = makeStyles({
   wrapper: {
@@ -16,15 +18,21 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '2vh 2vw'
+    padding: '2vh 2vw', 
+    flexGrow: '1'
   },
 })
 
-export default function List({ hasLoaded, hasError, toggleViewer, fallback, countries, selectCountry }) {
+export default function List({ toggleViewer, selectCountry }) {
+  const { getStoredItem } = useLocalStorage()
   const classes = useStyles()
-  if (!countries || !hasLoaded || hasError) return fallback
+  const cachedCountries = getStoredItem('countries')
+  const countries = JSON.parse(cachedCountries)
+
+  if (!countries) return <Fallback children={'😬😬 Something went wrong!'}/>
+
   return (
-    <Box sx={{ flexGrow: 1 }} className={classes.wrapper}>
+    <Box className={classes.wrapper}>
       <Grid container spacing={8}>
       {/* using cca2 as the unique ID - see more here https://github.com/mledoze/countries/blob/master/README.md */}
       { countries.map( (c) => 
@@ -56,7 +64,7 @@ const BasicCard = ({ country, toggleViewer, selectCountry }) => {
   }
 
   return (
-    <Grid item xs={3}>
+    <Grid item xs={12} md={6} lg={4}>
       <Card sx={{ minWidth: 70 }}>
         <CardMedia
           component="img"

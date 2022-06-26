@@ -85,21 +85,21 @@ export default function Header() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar
           className={classes.toolbar }
           >
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div">
             Where in the world?
           </Typography>
           <FormGroup>
             <FormControlLabel
               control={
-                <Switch sx={{ m: 1 }} 
-                defaultChecked 
-                className={classes.switch }
-                onClick={colorMode.toggleColorMode} 
+                <Switch
+                  defaultChecked 
+                  className={classes.switch }
+                  onClick={colorMode.toggleColorMode} 
                 />
               }
               label={theme.mode}

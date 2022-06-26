@@ -2,83 +2,85 @@ import * as React from 'react';
 import Header from '../Header';
 import Controls from '../Controls';
 import Viewer from '../Viewer';
-import Box from '@mui/material/Box'
+import Fallback from '../Fallback';
 import { makeStyles } from '@material-ui/styles'
+import CircularProgress from '@mui/material/CircularProgress'
 import List from '../List'
+import { useLocalStorage } from '../../hooks'
 
 const useStyles = makeStyles({
   home: {
-    backgroundColor: '#fff',
-    height: '100vh'
-  },
-  loader: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: '2vh 2vw',
-    height: '100vh'
+    backgroundColor: '#FAFAFA',
+    display: 'block',
+    width: '100vw',
+    height: '100vh',
+    overflow: 'scroll',
   },
 })
 
 function Home() {
+  const { getStoredItem, setStoredItem } = useLocalStorage()
   const [isViewerMode, setViewerMode] = React.useState(false)
-  const [selectedCountry, setSelectedCountry] = React.useState({})
   const classes = useStyles()
   const [hasLoaded, setHasLoaded] = React.useState(false)
   const [hasError, setHasError] = React.useState(false)
-  const [countries, setCountries] = React.useState(() => {
-    const cachedCountries = localStorage.getItem('countries');
-    const initialValue = JSON.parse(cachedCountries);
-    return initialValue || [];
-  })
+  const [countries, setCountries] = React.useState([])
+  const [selectedCountry, setSelectedCountry] = React.useState({})
+  const [endpoint, setEndpoint] = React.useState('https://restcountries.com/v3.1/all')
+  
+  // initial fetch
   React.useEffect(() => {
     const fetchCountries = async () => {
-      const data = await fetch('https://restcountries.com/v3.1/all').then(res => {
+      const data = await fetch(endpoint).then(res => {
         setHasLoaded(true)
         return res.json()
       }).catch(err => {
         setHasError(true)
         console.error(err)  
       })
-      localStorage.setItem('countries', JSON.stringify(data))
+      setCountries(data)
+      setStoredItem('countries', JSON.stringify(data))
     }
     fetchCountries()
-  }, [countries])
+  }, [endpoint, setStoredItem])
+
+  const updateList = (endpoint) => {
+    const cachedCountries = getStoredItem('countries')
+    setCountries(JSON.parse(cachedCountries))
+    setEndpoint(endpoint)
+    console.log(`Updating list - current endpoint: ${endpoint}`)
+  }
+
+  const renderLoader = !countries || countries?.length === 0
+  const renderError = hasError
+  if (renderError) return <Fallback children={'😬😬 Something went wrong - look at the console!'}/>
+  if (renderLoader) return <Fallback children={<CircularProgress color="inherit" />}/>
 
   return (
     <div className={classes.home}>
       <Header />
-      {isViewerMode 
+      {isViewerMode
       ? 
         <Viewer 
           toggleViewer={() => setViewerMode(!isViewerMode)} 
-          country={selectedCountry} 
-          fallback={<Loader />}
-            
+          country={selectedCountry}
           />
       :
         <>
-          <Controls/>
-          <List 
-            hasLoaded={hasLoaded}
-            hasError={hasError}
-            toggleViewer={() => setViewerMode(!isViewerMode)} 
-            fallback={<Loader />} 
-            countries={countries} 
-            selectCountry={(country) => setSelectedCountry(country)}
-            /> 
+          <Controls onControlSelection={updateList}/>
+          {
+            hasLoaded && countries ? 
+              <List 
+                toggleViewer={() => setViewerMode(!isViewerMode)} 
+                selectCountry={(country) => setSelectedCountry(country)}
+                /> 
+            : <Fallback children={<CircularProgress color="inherit" />} />
+          }
+          
         </>
       } 
     </div>
   );
 }
-
-const Loader = () => {
-  const classes = useStyles()
-  return <Box sx={{alignContent: 'center' }} className={classes.loader}>
-    Loading...
-  </Box>
-}
-  
 
 export default Home;
