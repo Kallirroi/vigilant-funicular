@@ -10,11 +10,12 @@ import { Paper } from '@mui/material'
 import { useLocalStorage } from '../../hooks'
 
 const useStyles = makeStyles({
-  viewerControls: {
+  viewer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'start',
     padding: '2vw',
+    height: '100%',
   },
   button: {
     width: '150px',
@@ -70,8 +71,12 @@ export default function Viewer({ country, toggleViewer }) {
     return borderingCountry[0].name.official
   }
   return (
-    <Box className={classes.viewerControls}>
-      <Button onClick={toggleViewer} className={classes.button}>← Back</Button>
+    <Box sx={{
+        bgcolor: 'background.default',
+        color: 'text.primary',
+      }} 
+      className={classes.viewer}>
+      <Button color="secondary" onClick={toggleViewer} className={classes.button}>← Back</Button>
         <Grid container spacing={2}>
           {/* IMAGE */}
           <Grid item xs={12} md={8} lg={6}>

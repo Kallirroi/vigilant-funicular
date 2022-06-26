@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
   home: {
-    backgroundColor: '#fff',
     display: 'block',
     width: '100vw',
     height: '100vh',

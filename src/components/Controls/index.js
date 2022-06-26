@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import TextField from '@mui/material/TextField'
+import Grid from '@mui/material/Grid'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -10,21 +11,15 @@ import { Divider } from '@mui/material'
 
 const useStyles = makeStyles({
   controls: {
-    backgroundColor: '#fff',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: '2vh 2vw',
   },
   search: {
     height: '50px',
-    width: '240px',
-    paddingRight: '1vw'
+    marginBottom: '10px !important'
   },
   menu: {
     '& > *': {
-      height: '50px', 
+      height: '50px',
     }
   },
 })
@@ -33,10 +28,10 @@ export default function Controls({ onControlSelection }) {
   const classes = useStyles()
   return (
     <>
-      <div className={classes.controls}>
+      <Grid container className={classes.controls}>
         <SearchField onControlSelection={onControlSelection} />
         <BasicMenu onControlSelection={onControlSelection} />
-      </div>
+      </Grid>
       <Divider light />
     </>
 
@@ -52,7 +47,7 @@ const SearchField = ({ onControlSelection }) => {
     setSearchTerm(searchTerm)
   }
   return (
-    <Box
+    <Grid item xs={12} md={10} lg={10}
       className={classes.search}
       component="form"
       noValidate
@@ -66,7 +61,7 @@ const SearchField = ({ onControlSelection }) => {
         label="🔍 Search for a country" 
         type="search" 
         /> 
-    </Box>
+    </Grid>
   )
 }
 
@@ -89,7 +84,7 @@ const BasicMenu = ({ onControlSelection }) => {
     handleClose()
   }
   return (
-    <div className={classes.menu}>
+    <Grid item className={classes.menu}>
       <Button
         id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
@@ -117,6 +112,6 @@ const BasicMenu = ({ onControlSelection }) => {
           {r}
         </MenuItem>)}
       </Menu>
-    </div>
+    </Grid>
   )
 }

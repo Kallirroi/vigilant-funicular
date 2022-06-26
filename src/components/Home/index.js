@@ -1,34 +1,22 @@
-import * as React from 'react';
-import Header from '../Header';
-import Controls from '../Controls';
-import Viewer from '../Viewer';
-import Fallback from '../Fallback';
-import { makeStyles } from '@material-ui/styles'
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Header from '../Header'
+import Controls from '../Controls'
+import Viewer from '../Viewer'
+import Fallback from '../Fallback'
 import CircularProgress from '@mui/material/CircularProgress'
 import List from '../List'
 import { useLocalStorage } from '../../hooks'
 
-const useStyles = makeStyles({
-  home: {
-    backgroundColor: '#FAFAFA',
-    display: 'block',
-    width: '100vw',
-    height: '100vh',
-    overflow: 'scroll',
-  },
-})
-
-function Home() {
+export function Home({ toggleColorMode }) {
   const { getStoredItem, setStoredItem } = useLocalStorage()
   const [isViewerMode, setViewerMode] = React.useState(false)
-  const classes = useStyles()
   const [hasLoaded, setHasLoaded] = React.useState(false)
   const [hasError, setHasError] = React.useState(false)
   const [countries, setCountries] = React.useState([])
   const [selectedCountry, setSelectedCountry] = React.useState({})
   const [endpoint, setEndpoint] = React.useState('https://restcountries.com/v3.1/all')
   
-  // initial fetch
   React.useEffect(() => {
     const fetchCountries = async () => {
       const data = await fetch(endpoint).then(res => {
@@ -57,8 +45,16 @@ function Home() {
   if (renderLoader) return <Fallback children={<CircularProgress color="inherit" />}/>
 
   return (
-    <div className={classes.home}>
-      <Header />
+    <Box 
+      sx={{
+        bgcolor: 'background.default',
+        color: 'text.primary',
+        display: 'block',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'scroll',
+      }}>
+      <Header toggleColorMode={toggleColorMode} />
       {isViewerMode
       ? 
         <Viewer 
@@ -79,8 +75,6 @@ function Home() {
           
         </>
       } 
-    </div>
+    </Box>
   );
 }
-
-export default Home;
